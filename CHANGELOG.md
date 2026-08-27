@@ -11,6 +11,7 @@
 - Skill docs, PRODUCT / DESIGN / ROADMAP / CONTRIBUTING, bilingual README
 - `scripts/package-smoke.mjs`
 - Full install/distribution: deterministic `archifyX.zip`, `install-skill`, release-identity gate, `docs/install.md` + start install matrix (`npx skills add CommerQ/archifyX …`)
+- Proof Lab gallery + recipe guide generators; first-class `compare`; merged platform+leaf `guide`; release workflow; brands/viewer/present docs
 
 ### Product traits
 

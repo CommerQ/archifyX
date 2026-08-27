@@ -86,6 +86,15 @@ node bin/archifyX.mjs guide "<scenario>" --json
 
 Read Mermaid for topology, author fresh typed JSON. Inspect repository evidence when the map must reflect real code. Atlas authorship only organizes leaves — never invents topology.
 
+## References
+
+| Topic | Path |
+|---|---|
+| Atlas IR | `references/authoring-contract.md`, `module-pack.md`, `delivery-contract.md` |
+| Brand marks | `references/brand-marks.md` → engine catalogue |
+| Viewer / present | `references/viewer-runtime.md`, root `docs/present-mode.md` |
+| Recipes | `recipes/platform.mjs` + `engine/recipes/` (merged in `guide`) |
+
 ## Authoring invariants
 
 ### Platform

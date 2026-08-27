@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 /**
- * Build committed Platform Atlas proof under examples/platform-atlas/
- * and verify docs pages exist.
+ * Build committed Platform Atlas proof, guide, and Proof Lab gallery.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -13,6 +12,19 @@ const skill = path.join(root, 'archifyX');
 const cli = path.join(skill, 'bin', 'archifyX.mjs');
 const srcDir = path.join(skill, 'examples');
 const outDir = path.join(root, 'examples', 'platform-atlas');
+
+function run(script, args = []) {
+  const r = spawnSync(process.execPath, [path.join(root, 'scripts', script), ...args], {
+    encoding: 'utf8',
+    cwd: root
+  });
+  if (r.status !== 0) {
+    process.stderr.write(r.stderr || '');
+    process.stdout.write(r.stdout || '');
+    process.exit(r.status ?? 1);
+  }
+  process.stdout.write(r.stdout || '');
+}
 
 function copyFile(name) {
   fs.copyFileSync(path.join(srcDir, name), path.join(outDir, name));
@@ -35,14 +47,22 @@ if (build.status !== 0) {
   process.exit(build.status ?? 1);
 }
 
+run('build-guide.mjs');
+run('build-gallery.mjs');
+
 const requiredDocs = [
   'docs/index.html',
   'docs/start.html',
   'docs/guide.html',
   'docs/gallery.html',
+  'docs/gallery/manifest.json',
+  'docs/.nojekyll',
+  'docs/install.md',
+  'docs/present-mode.md',
   'docs/authoring-cookbook.md',
   'docs/authoring-cookbook.zh-CN.md',
-  'docs/COMPLETENESS.md'
+  'docs/COMPLETENESS.md',
+  'examples/architecture-delta/checkout-platform-delta.html'
 ];
 for (const rel of requiredDocs) {
   if (!fs.existsSync(path.join(root, rel))) {

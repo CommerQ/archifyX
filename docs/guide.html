@@ -7,34 +7,147 @@
   <style>
     :root { color-scheme: dark; --bg:#0b1220; --text:#f8fafc; --muted:#94a3b8; --accent:#38bdf8; --border:#243044; }
     body { margin:0; font:15px/1.55 "JetBrains Mono", ui-monospace, Segoe UI, sans-serif; background:var(--bg); color:var(--text); }
-    main { max-width: 52rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
-    h1 { font-size:1.4rem; } h2 { font-size:1.05rem; margin-top:1.75rem; }
-    p, li { color:var(--muted); } a { color:var(--accent); }
-    table { border-collapse: collapse; width:100%; margin-top:1rem; }
-    th, td { border:1px solid var(--border); padding:.5rem .65rem; text-align:left; }
+    main { max-width: 64rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+    h1 { font-size:1.4rem; } p, .zh, .q { color:var(--muted); }
+    a { color:var(--accent); }
+    table { border-collapse: collapse; width:100%; margin-top:1rem; font-size:.85rem; }
+    th, td { border:1px solid var(--border); padding:.55rem .65rem; text-align:left; vertical-align:top; }
     th { color:var(--text); }
+    .type { color:var(--accent); font-size:.75rem; }
+    .prompt code { display:block; white-space:pre-wrap; color:var(--text); }
+    pre { background:#020617; border:1px solid var(--border); padding:1rem; overflow:auto; border-radius:.4rem; }
   </style>
 </head>
 <body>
 <main>
   <p><a href="./index.html">← archifyX</a></p>
-  <h1>Scenario guide</h1>
-  <p>Pick atlas vs single diagram, then a leaf type. Full recipes: <code>archifyX/recipes/</code> and <code>engine/recipes/</code>.</p>
-  <h2>When to use archifyX</h2>
-  <ul>
-    <li>Many modules / nested packs → <strong>Platform Atlas</strong></li>
-    <li>One bounded map only → still use <code>archifyX deliver</code> (bundled engine)</li>
-  </ul>
-  <h2>Five leaf types</h2>
+  <h1>Scenario guide (13)</h1>
+  <p>Platform recipes first, then leaf types. CLI merges both:</p>
+  <pre>node bin/archifyX.mjs guide "平台图谱" --json
+node bin/archifyX.mjs guide "agent tool call" --json</pre>
   <table>
-    <tr><th>Type</th><th>Use for</th></tr>
-    <tr><td>architecture (A)</td><td>Components, boundaries, storage</td></tr>
-    <tr><td>workflow (W)</td><td>CI/CD, approvals, runbooks</td></tr>
-    <tr><td>sequence (S)</td><td>API / auth / async traces</td></tr>
-    <tr><td>dataflow (D)</td><td>Pipelines, lineage, consumers</td></tr>
-    <tr><td>lifecycle (L)</td><td>States, retries, terminals</td></tr>
+    <thead><tr><th>Id</th><th>Question</th><th>Copy-ready prompt</th></tr></thead>
+    <tbody>
+<tr id="recipe-platform-atlas">
+  <td><code>platform-atlas</code><br/><span class="type">platform-atlas</span></td>
+  <td>
+    <strong data-en="Platform atlas" data-zh="平台图谱">Platform atlas</strong>
+    <div class="q">How do I navigate a large system without one mega diagram?</div>
+    <div class="zh">平台图谱 — 大型系统如何避免一张巨图，又能下钻？</div>
+  </td>
+  <td class="prompt"><code>Use archifyX to build a platform atlas for this repository. Author an overview architecture, group subsystems into nested modules with A/W/S/D/L packs, deliver what is known, leave the rest as planned stubs, then build-index.</code></td>
+</tr>
+<tr id="recipe-module-pack">
+  <td><code>module-pack</code><br/><span class="type">platform-atlas</span></td>
+  <td>
+    <strong data-en="Module pack" data-zh="模块包">Module pack</strong>
+    <div class="q">Which diagram types belong in one module?</div>
+    <div class="zh">模块包 — 一个模块里该放哪些图？</div>
+  </td>
+  <td class="prompt"><code>For this module, use archifyX to deliver an architecture map and one deep diagram (sequence or lifecycle). Keep ≤12 primary nodes. Register both in the atlas module pack.</code></td>
+</tr>
+<tr id="recipe-system-overview">
+  <td><code>system-overview</code><br/><span class="type">architecture</span></td>
+  <td>
+    <strong data-en="System overview" data-zh="系统总览">System overview</strong>
+    <div class="q">What exists, who owns it, and how is it connected?</div>
+    <div class="zh">系统总览 — 系统里有什么、归谁负责、彼此如何连接？</div>
+  </td>
+  <td class="prompt"><code>Analyze this repository, then use Archify to create a high-level architecture diagram. Show 8–12 core runtime components, one primary request or data path, external dependencies, ownership or trust boundaries, and put supporting detail in cards instead of adding more edges.</code></td>
+</tr>
+<tr id="recipe-deployment-ownership">
+  <td><code>deployment-ownership</code><br/><span class="type">architecture</span></td>
+  <td>
+    <strong data-en="Deployment ownership" data-zh="部署与归属">Deployment ownership</strong>
+    <div class="q">Where does each workload run, and what crosses a boundary?</div>
+    <div class="zh">部署与归属 — 每个工作负载运行在哪里，哪些连接跨越了边界？</div>
+  </td>
+  <td class="prompt"><code>Use Archify to draw the production deployment topology. Group resources by region, network, cluster, and owner; show workloads and stateful services; label every cross-boundary mechanism. Do not invent deployment facts—mark unknown areas explicitly. If the user wants a fail-closed deployment review, ask before setting meta.engineering_profile to deployment-ownership; otherwise leave the engineering profile unset.</code></td>
+</tr>
+<tr id="recipe-agent-tool-call">
+  <td><code>agent-tool-call</code><br/><span class="type">workflow</span></td>
+  <td>
+    <strong data-en="Agent tool-call loop" data-zh="智能体工具调用">Agent tool-call loop</strong>
+    <div class="q">How does an agent plan, get permission, act, recover, and report?</div>
+    <div class="zh">智能体工具调用 — 智能体如何规划、获批、执行、恢复并汇报？</div>
+  </td>
+  <td class="prompt"><code>Use Archify workflow mode to explain this agent tool-call loop. Separate user surface, agent runtime, policy boundary, exception handling, tool execution, and observability into lanes. Make the successful path primary and show approval, retry, blocked, and evidence paths explicitly.</code></td>
+</tr>
+<tr id="recipe-delivery-workflow">
+  <td><code>delivery-workflow</code><br/><span class="type">workflow</span></td>
+  <td>
+    <strong data-en="Delivery workflow" data-zh="研发交付流程">Delivery workflow</strong>
+    <div class="q">How does a change move safely from commit to production?</div>
+    <div class="zh">研发交付流程 — 一次变更如何安全地从提交走到生产？</div>
+  </td>
+  <td class="prompt"><code>Use Archify workflow mode to draw this delivery process from commit to production. Separate developer, CI, approval, environment, and exception lanes; mark blocking checks, smoke tests, ownership, and the rollback path. Keep one unmistakable happy path.</code></td>
+</tr>
+<tr id="recipe-incident-runbook">
+  <td><code>incident-runbook</code><br/><span class="type">workflow</span></td>
+  <td>
+    <strong data-en="Incident runbook" data-zh="事故处置 Runbook">Incident runbook</strong>
+    <div class="q">How do responders detect, triage, mitigate, verify, and escalate?</div>
+    <div class="zh">事故处置 Runbook — 响应者如何发现、分诊、缓解、验证并升级？</div>
+  </td>
+  <td class="prompt"><code>Use Archify workflow mode to turn this incident runbook into responder lanes. Show detection, triage, mitigation, escalation, communication, rollback, and recovery verification. Separate decision gates from actions and make missing ownership visible.</code></td>
+</tr>
+<tr id="recipe-api-request">
+  <td><code>api-request</code><br/><span class="type">sequence</span></td>
+  <td>
+    <strong data-en="API request chain" data-zh="API 请求链">API request chain</strong>
+    <div class="q">Who calls whom, in what order, and what returns?</div>
+    <div class="zh">API 请求链 — 谁调用谁、顺序如何、最终返回什么？</div>
+  </td>
+  <td class="prompt"><code>Use Archify sequence mode to show this request from caller to final response. Include authentication, cache hit or miss, persistence fallback, return messages, and asynchronous trace or event emission. Keep message labels short and order unambiguous.</code></td>
+</tr>
+<tr id="recipe-async-roundtrip">
+  <td><code>async-roundtrip</code><br/><span class="type">sequence</span></td>
+  <td>
+    <strong data-en="Async roundtrip" data-zh="异步往返链路">Async roundtrip</strong>
+    <div class="q">What happens after the initial request returns?</div>
+    <div class="zh">异步往返链路 — 初始请求返回之后，后台还会发生什么？</div>
+  </td>
+  <td class="prompt"><code>Use Archify sequence mode to explain this asynchronous roundtrip. Show the initial acknowledgement, enqueue or scheduling step, background processing, callback or polling, retry and timeout behavior, and the point where the caller can observe final consistency.</code></td>
+</tr>
+<tr id="recipe-data-lineage">
+  <td><code>data-lineage</code><br/><span class="type">dataflow</span></td>
+  <td>
+    <strong data-en="Data lineage" data-zh="数据血缘">Data lineage</strong>
+    <div class="q">Where does data come from, how does it change, and who consumes it?</div>
+    <div class="zh">数据血缘 — 数据从哪里来、如何变化、最终被谁消费？</div>
+  </td>
+  <td class="prompt"><code>Use Archify dataflow mode to map this data lineage. Name every data asset and transform, show consent or classification boundaries, distinguish streaming from batch paths, and identify stores plus downstream consumers. Do not use unlabeled flows.</code></td>
+</tr>
+<tr id="recipe-event-stream">
+  <td><code>event-stream</code><br/><span class="type">dataflow</span></td>
+  <td>
+    <strong data-en="Event-stream topology" data-zh="事件流拓扑">Event-stream topology</strong>
+    <div class="q">Which events move through which topics, processors, groups, and failure paths?</div>
+    <div class="zh">事件流拓扑 — 哪些事件经过哪些 Topic、处理器、消费者组和失败路径？</div>
+  </td>
+  <td class="prompt"><code>Use Archify dataflow mode to draw this event-stream topology. Name producers, events, topics, ordered processors, consumer groups, state stores, replay paths, and the DLQ. Show ownership and delivery semantics only when supported by evidence.</code></td>
+</tr>
+<tr id="recipe-object-lifecycle">
+  <td><code>object-lifecycle</code><br/><span class="type">lifecycle</span></td>
+  <td>
+    <strong data-en="Object lifecycle" data-zh="对象生命周期">Object lifecycle</strong>
+    <div class="q">Which states exist, what events move between them, and how does it end?</div>
+    <div class="zh">对象生命周期 — 有哪些状态、什么事件触发流转、最终如何结束？</div>
+  </td>
+  <td class="prompt"><code>Use Archify lifecycle mode to model this object. Separate main progress, waiting or interruption states, and terminal outcomes. Label transitions with events, include retry, cancellation, timeout, success, and failure where real, and never hide an ending.</code></td>
+</tr>
+<tr id="recipe-deployment-lifecycle">
+  <td><code>deployment-lifecycle</code><br/><span class="type">lifecycle</span></td>
+  <td>
+    <strong data-en="Deployment lifecycle" data-zh="部署生命周期">Deployment lifecycle</strong>
+    <div class="q">What state is a release in, and what can happen next?</div>
+    <div class="zh">部署生命周期 — 一次发布当前处于什么状态，下一步可能发生什么？</div>
+  </td>
+  <td class="prompt"><code>Use Archify lifecycle mode to model the deployment object. Show queued, building, verifying, waiting for approval, promoting, rolling back, and every terminal outcome. Label the events and guards that permit each transition.</code></td>
+</tr>
+    </tbody>
   </table>
-  <p><a href="./gallery.html">Gallery</a> · CLI: <code>node bin/archifyX.mjs guide "场景描述" --json</code></p>
+  <p style="margin-top:1.5rem"><a href="./gallery.html">Proof Lab</a> · <a href="./authoring-cookbook.md">Cookbook</a> · <a href="./present-mode.md">Present / presets</a></p>
 </main>
 </body>
 </html>

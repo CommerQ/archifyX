@@ -10,6 +10,7 @@
  * Diagram engine (in-tree ./engine):
  *   validate-diagram <type> <spec.json> [...]
  *   deliver <type> <spec.json> <out.html> [...]
+ *   compare architecture <base.json> <head.json> [out.html] [...]
  *   preview | guide | brands | visual-check | diagram <engine-args...>
  */
 import fs from 'node:fs';
@@ -41,8 +42,9 @@ Platform Atlas:
 Diagram engine (bundled under ./engine — no external install):
   validate-diagram <type> <spec.json> [--quality showcase] [--json]
   deliver <type> <spec.json> <out.html> [--quality showcase] [--json]
+  compare architecture <base.json> <head.json> [out.html] [--receipt path] [--json]
   preview <type> <spec.json> <out.html> [--quality showcase]
-  guide "<scenario>" [--json]
+  guide ["<scenario>"] [--json] [--lang en|zh]
   brands [list|capture <url>] [--json]
   visual-check <html> [--json]
   diagram <engine-subcommand-and-args...>
@@ -51,6 +53,8 @@ Examples:
   node bin/archifyX.mjs doctor
   node bin/archifyX.mjs demo ../examples/demo-out
   node bin/archifyX.mjs deliver architecture web-app.architecture.json out.html --quality showcase --json
+  node bin/archifyX.mjs guide "平台图谱" --json
+  node bin/archifyX.mjs compare architecture base.json head.json delta.html --json
 `;
 }
 
@@ -128,6 +132,56 @@ function commandDoctor() {
   }
 
   process.exit(ok ? 0 : 1);
+}
+
+async function commandGuide(args) {
+  const { pathToFileURL } = await import('node:url');
+  const guidePath = path.join(pkgRoot, 'scripts', 'guide.mjs');
+  let guide;
+  try {
+    guide = await import(pathToFileURL(guidePath).href);
+  } catch (error) {
+    die(`Could not load guide recipes: ${error.message}`);
+  }
+
+  let lang;
+  let json = false;
+  const queryParts = [];
+  for (let i = 0; i < args.length; i += 1) {
+    const arg = args[i];
+    if (arg === '--json') json = true;
+    else if (arg === '--lang') {
+      const value = args[i + 1];
+      if (value !== 'en' && value !== 'zh') die('--lang must be "en" or "zh"');
+      lang = value;
+      i += 1;
+    } else if (arg.startsWith('--lang=')) {
+      const value = arg.slice('--lang='.length);
+      if (value !== 'en' && value !== 'zh') die('--lang must be "en" or "zh"');
+      lang = value;
+    } else if (arg.startsWith('--')) die(`Unknown guide option "${arg}"`);
+    else queryParts.push(arg);
+  }
+
+  const query = queryParts.join(' ').trim();
+  if (!query) {
+    const selectedLang = lang || 'en';
+    if (json) {
+      console.log(
+        JSON.stringify(
+          { ok: true, mode: 'list', lang: selectedLang, recipes: guide.listScenarioRecipes(selectedLang) },
+          null,
+          2
+        )
+      );
+    } else {
+      console.log(guide.formatScenarioList(selectedLang));
+    }
+    return;
+  }
+
+  const result = guide.recommendScenario(query, lang ? { lang } : {});
+  console.log(json ? JSON.stringify(result, null, 2) : guide.formatScenarioRecommendation(result));
 }
 
 function commandDemo(outdirArg) {
@@ -246,7 +300,7 @@ function commandDemo(outdirArg) {
   console.log('Serve with:  npx --yes serve ' + outdir);
 }
 
-function main() {
+async function main() {
   const [cmd, ...rest] = process.argv.slice(2);
   if (!cmd || cmd === '-h' || cmd === '--help' || cmd === 'help') {
     console.log(usage());
@@ -261,16 +315,18 @@ function main() {
   if (cmd === 'demo') return commandDemo(rest[0]);
   if (cmd === 'validate') return runAtlas(['validate', ...rest]);
   if (cmd === 'build-index') return runAtlas(['build-index', ...rest]);
+  if (cmd === 'guide') return commandGuide(rest);
 
   const engine = requireEngine();
   if (cmd === 'diagram') return runNode(engine.bin, rest);
   if (cmd === 'validate-diagram') return runNode(engine.bin, ['validate', ...rest]);
   if (cmd === 'visual-check') return runNode(engine.bin, ['visual-check', ...rest]);
-  if (cmd === 'deliver' || cmd === 'preview' || cmd === 'guide' || cmd === 'brands') {
+  if (cmd === 'compare') return runNode(engine.bin, ['compare', ...rest]);
+  if (cmd === 'deliver' || cmd === 'preview' || cmd === 'brands') {
     return runNode(engine.bin, [cmd, ...rest]);
   }
 
   die(`Unknown command: ${cmd}\n\n${usage()}`);
 }
 
-main();
+main().catch((error) => die(error.message || String(error)));

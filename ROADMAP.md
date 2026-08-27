@@ -12,10 +12,10 @@ Current line: `v0.1.0`.
 
 ## Next
 
-- Platform Proof Lab gallery
+- Platform Proof Lab motion/screenshot polish in docs/assets
 - Stricter delivered-vs-stub counts in `build-index --json`
-- SPA chrome `visual-check` evidence helper
-- GitHub Release attach for `archifyX.zip`
+- SPA chrome `visual-check` evidence helper in CI (optional Chrome)
+- Engine golden subset in CI
 
 ## Not planned
 

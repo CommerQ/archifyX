@@ -19,8 +19,11 @@ const required = [
   'references/module-pack.md',
   'references/delivery-contract.md',
   'references/authoring-contract.md',
+  'references/brand-marks.md',
+  'references/viewer-runtime.md',
   'examples/platform.atlas.json',
   'recipes/platform.mjs',
+  'scripts/guide.mjs',
   'test/atlas-smoke.mjs',
   'engine/bin/archify.mjs',
   'engine/package.json',
@@ -35,14 +38,19 @@ const rootRequired = [
   'docs/guide.html',
   'docs/gallery.html',
   'docs/install.md',
+  'docs/present-mode.md',
+  'docs/.nojekyll',
   'docs/authoring-cookbook.md',
   'docs/COMPLETENESS.md',
   'scripts/build-docs.mjs',
+  'scripts/build-gallery.mjs',
+  'scripts/build-guide.mjs',
   'scripts/run-tests.mjs',
   'scripts/build-zip.mjs',
   'scripts/install-skill.mjs',
   'scripts/check-release-identity.mjs',
-  'scripts/write-deterministic-zip.mjs'
+  'scripts/write-deterministic-zip.mjs',
+  '.github/workflows/release.yml'
 ];
 
 let failed = false;

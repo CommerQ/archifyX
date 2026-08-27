@@ -67,7 +67,8 @@ mklink /J "%USERPROFILE%\.cursor\skills\archifyX" "D:\workspace\archifyX\archify
 | `doctor` / `demo` | Health + seeded SPA |
 | `validate` / `build-index` | Atlas IR → Platform Viewer |
 | `deliver` / `validate-diagram` / `preview` | In-tree diagram engine |
-| `guide` / `brands` / `visual-check` | Engine helpers |
+| `compare` | Architecture base/head delta + receipt |
+| `guide` / `brands` / `visual-check` | Platform+leaf recipes, brands, proof check |
 
 ## Product traits
 

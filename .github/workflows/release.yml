@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Identity + tests
+        run: |
+          node scripts/check-release-identity.mjs
+          npm test
+      - name: Tag must match package.json version
+        run: |
+          pkg_version="$(node -p "require('./archifyX/package.json').version")"
+          tag="${GITHUB_REF_NAME#v}"
+          if [ "$pkg_version" != "$tag" ]; then
+            echo "::error::tag v$tag does not match archifyX/package.json version $pkg_version"
+            exit 1
+          fi
+      - name: Classify stable and prerelease tags
+        id: release-kind
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          if [[ "$version" == *-* ]]; then
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+            echo "make_latest=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+            echo "make_latest=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Build skill archive
+        run: node scripts/build-zip.mjs /tmp/archifyX.zip
+      - name: Validate packed zip doctor
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/archifyx-release"
+          unzip -q /tmp/archifyX.zip -d "$RUNNER_TEMP/archifyx-release"
+          node "$RUNNER_TEMP/archifyx-release/archifyX/bin/archifyX.mjs" doctor
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: /tmp/archifyX.zip
+          generate_release_notes: true
+          prerelease: ${{ steps.release-kind.outputs.prerelease }}
+          make_latest: ${{ steps.release-kind.outputs.make_latest }}

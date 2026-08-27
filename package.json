@@ -8,6 +8,8 @@
     "doctor": "node archifyX/bin/archifyX.mjs doctor",
     "demo": "node archifyX/bin/archifyX.mjs demo examples/demo-out",
     "build:docs": "node scripts/build-docs.mjs",
+    "build:gallery": "node scripts/build-gallery.mjs",
+    "build:guide": "node scripts/build-guide.mjs",
     "test": "node scripts/run-tests.mjs",
     "smoke": "node scripts/package-smoke.mjs",
     "pack": "node scripts/build-zip.mjs",

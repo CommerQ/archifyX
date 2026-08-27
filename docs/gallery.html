@@ -3,28 +3,182 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>archifyX Gallery</title>
+  <meta name="generator" content="archifyX gallery 0.1.0" />
+  <title>archifyX Proof Lab</title>
   <style>
-    :root { color-scheme: dark; --bg:#0b1220; --text:#f8fafc; --muted:#94a3b8; --accent:#38bdf8; --border:#243044; }
+    :root { color-scheme: dark; --bg:#0b1220; --text:#f8fafc; --muted:#94a3b8; --accent:#38bdf8; --border:#243044; --panel:#111827; }
     body { margin:0; font:15px/1.55 "JetBrains Mono", ui-monospace, Segoe UI, sans-serif; background:var(--bg); color:var(--text); }
-    main { max-width: 56rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
-    h1 { font-size:1.4rem; } p { color:var(--muted); } a { color:var(--accent); }
-    .card { border:1px solid var(--border); border-radius:.5rem; padding:1rem 1.1rem; margin-top:1rem; }
+    main { max-width: 72rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+    h1 { font-size:1.45rem; margin:0 0 .5rem; }
+    .lead, .zh, p { color:var(--muted); }
+    a { color:var(--accent); }
+    .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr)); gap:1rem; margin-top:1.5rem; }
+    .card { border:1px solid var(--border); border-radius:.5rem; padding:1rem; background:var(--panel); border-top:3px solid var(--accent, #38bdf8); }
+    .kicker { font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+    h2 { font-size:1rem; margin:.35rem 0 .75rem; }
+    h2 .zh { font-weight:400; font-size:.85rem; color:var(--muted); }
+    .preview { aspect-ratio: 16/10; border:1px solid var(--border); border-radius:.35rem; overflow:hidden; background:#020617; margin-bottom:.75rem; }
+    .preview iframe { width:100%; height:100%; border:0; }
+    .meta { font-size:.75rem; color:var(--muted); margin:.5rem 0; }
+    .actions { display:flex; flex-wrap:wrap; gap:.65rem; }
+    a.primary { color:#0b1220; background:var(--accent); padding:.25rem .55rem; border-radius:.3rem; text-decoration:none; font-weight:600; }
   </style>
 </head>
 <body>
 <main>
   <p><a href="./index.html">← archifyX</a></p>
-  <h1>Proof Lab (gallery)</h1>
-  <p>Committed proofs for Platform Atlas + leaf samples. Rebuild with <code>node scripts/build-docs.mjs</code>.</p>
-  <div class="card">
-    <strong><a href="../examples/platform-atlas/index.html">Platform Atlas demo</a></strong>
-    <p>Nested tree SPA seeded from skill examples (overview = web-app map; modules as stubs).</p>
+  <h1>Proof Lab</h1>
+  <p class="lead">11 proofs — platform atlas, five leaf types, architecture compare. Rebuild: <code>npm run build:gallery</code></p>
+  <div class="grid">
+<article class="card" id="proof-platform-atlas" style="--accent:#38bdf8">
+  <div class="kicker">Platform · 01</div>
+  <h2>Platform Atlas SPA <span class="zh">/ 平台图谱 SPA</span></h2>
+  <p>Nested module tree + overview architecture + A/W/S/D/L stubs in one SPA.</p>
+  <p class="zh">嵌套模块树 + 总览架构 + 行内 A/W/S/D/L 占位，组成一个 SPA。</p>
+  <a class="primary" href="../examples/platform-atlas/index.html">Open atlas SPA</a>
+</article>
+<article class="card" id="proof-web-app" style="--accent:#6ee7b7">
+  <div class="kicker">Architecture · 02</div>
+  <h2>Three-tier Web App <span class="zh">/ 三层 Web 应用</span></h2>
+  <div class="preview"><iframe src="gallery/artifacts/web-app.architecture.html?embed=1&amp;theme=dark" title="Three-tier Web App" loading="lazy"></iframe></div>
+  <p>Edge, auth, API, cache, persistence, and background work.</p>
+  <p class="zh">边缘、鉴权、API、缓存、持久化与后台任务。</p>
+  <div class="meta">SHA eb539c6fce6e · 706.1 KB</div>
+  <div class="actions">
+    <a class="primary" href="gallery/artifacts/web-app.architecture.html" target="_blank" rel="noopener">Artifact</a>
+    <a href="gallery/sources/web-app.architecture.json" target="_blank" rel="noopener">JSON</a>
+    
+    <a href="./start.html">Create</a>
   </div>
-  <div class="card">
-    <strong>Leaf samples</strong>
-    <p>See <code>archifyX/engine/examples/</code> (architecture / workflow / sequence / dataflow / lifecycle).</p>
+</article>
+<article class="card" id="proof-deployment-ownership" style="--accent:#38bdf8">
+  <div class="kicker">Architecture · 03</div>
+  <h2>Production Deployment <span class="zh">/ 生产部署与归属</span></h2>
+  <div class="preview"><iframe src="gallery/artifacts/production-deployment.architecture.html?embed=1&amp;theme=dark" title="Production Deployment" loading="lazy"></iframe></div>
+  <p>Regions, networks, workloads, state, and boundary crossings.</p>
+  <p class="zh">区域、网络、工作负载、状态与跨边界机制。</p>
+  <div class="meta">SHA f176d63a646b · 715.6 KB</div>
+  <div class="actions">
+    <a class="primary" href="gallery/artifacts/production-deployment.architecture.html" target="_blank" rel="noopener">Artifact</a>
+    <a href="gallery/sources/production-deployment.architecture.json" target="_blank" rel="noopener">JSON</a>
+    
+    <a href="./start.html">Create</a>
   </div>
+</article>
+<article class="card" id="proof-agent-tool-call" style="--accent:#67e8f9">
+  <div class="kicker">Workflow · 04</div>
+  <h2>Agent Tool Call <span class="zh">/ 智能体工具调用</span></h2>
+  <div class="preview"><iframe src="gallery/artifacts/agent-tool-call.workflow.html?embed=1&amp;theme=dark" title="Agent Tool Call" loading="lazy"></iframe></div>
+  <p>Planner, approval, tools, exceptions, and observability lanes.</p>
+  <p class="zh">规划、审批、工具、异常与可观测泳道。</p>
+  <div class="meta">SHA 166ccc4b18cb · 711.2 KB</div>
+  <div class="actions">
+    <a class="primary" href="gallery/artifacts/agent-tool-call.workflow.html" target="_blank" rel="noopener">Artifact</a>
+    <a href="gallery/sources/agent-tool-call.workflow.json" target="_blank" rel="noopener">JSON</a>
+    
+    <a href="./start.html">Create</a>
+  </div>
+</article>
+<article class="card" id="proof-release-delivery" style="--accent:#34d399">
+  <div class="kicker">Workflow · 05</div>
+  <h2>Release Delivery <span class="zh">/ 研发交付流程</span></h2>
+  <div class="preview"><iframe src="gallery/artifacts/release-delivery.workflow.html?embed=1&amp;theme=dark" title="Release Delivery" loading="lazy"></iframe></div>
+  <p>Build, gates, approval, canary, communicate, rollback.</p>
+  <p class="zh">构建、门禁、审批、金丝雀、沟通与回滚。</p>
+  <div class="meta">SHA 79d4c886a1fd · 710.0 KB</div>
+  <div class="actions">
+    <a class="primary" href="gallery/artifacts/release-delivery.workflow.html" target="_blank" rel="noopener">Artifact</a>
+    <a href="gallery/sources/release-delivery.workflow.json" target="_blank" rel="noopener">JSON</a>
+    
+    <a href="./start.html">Create</a>
+  </div>
+</article>
+<article class="card" id="proof-cache-miss" style="--accent:#c4b5fd">
+  <div class="kicker">Sequence · 06</div>
+  <h2>Cache Miss Request <span class="zh">/ 缓存未命中请求</span></h2>
+  <div class="preview"><iframe src="gallery/artifacts/cache-miss-request.sequence.html?embed=1&amp;theme=dark" title="Cache Miss Request" loading="lazy"></iframe></div>
+  <p>Auth, cache fallback, persist, return traffic, tracing.</p>
+  <p class="zh">鉴权、缓存回退、持久化、返回流量与追踪。</p>
+  <div class="meta">SHA 37d7e249ef4a · 707.7 KB</div>
+  <div class="actions">
+    <a class="primary" href="gallery/artifacts/cache-miss-request.sequence.html" target="_blank" rel="noopener">Artifact</a>
+    <a href="gallery/sources/cache-miss-request.sequence.json" target="_blank" rel="noopener">JSON</a>
+    
+    <a href="./start.html">Create</a>
+  </div>
+</article>
+<article class="card" id="proof-async-roundtrip" style="--accent:#a78bfa">
+  <div class="kicker">Sequence · 07</div>
+  <h2>Async Job Roundtrip <span class="zh">/ 异步任务往返</span></h2>
+  <div class="preview"><iframe src="gallery/artifacts/async-job-roundtrip.sequence.html?embed=1&amp;theme=dark" title="Async Job Roundtrip" loading="lazy"></iframe></div>
+  <p>Ack, queue, worker, retry, webhook, polling fallback.</p>
+  <p class="zh">确认、队列、worker、重试、Webhook 与轮询回退。</p>
+  <div class="meta">SHA 52aca7c12ce0 · 708.1 KB</div>
+  <div class="actions">
+    <a class="primary" href="gallery/artifacts/async-job-roundtrip.sequence.html" target="_blank" rel="noopener">Artifact</a>
+    <a href="gallery/sources/async-job-roundtrip.sequence.json" target="_blank" rel="noopener">JSON</a>
+    
+    <a href="./start.html">Create</a>
+  </div>
+</article>
+<article class="card" id="proof-product-analytics" style="--accent:#f6c453">
+  <div class="kicker">Data flow · 08</div>
+  <h2>Product Analytics <span class="zh">/ 产品分析数据流</span></h2>
+  <div class="preview"><iframe src="gallery/artifacts/product-analytics.dataflow.html?embed=1&amp;theme=dark" title="Product Analytics" loading="lazy"></iframe></div>
+  <p>Consent, stream, PII isolation, warehouse, consumers.</p>
+  <p class="zh">同意、流处理、PII 隔离、数仓与下游消费者。</p>
+  <div class="meta">SHA 9746dc77547e · 711.3 KB</div>
+  <div class="actions">
+    <a class="primary" href="gallery/artifacts/product-analytics.dataflow.html" target="_blank" rel="noopener">Artifact</a>
+    <a href="gallery/sources/product-analytics.dataflow.json" target="_blank" rel="noopener">JSON</a>
+    
+    <a href="./start.html">Create</a>
+  </div>
+</article>
+<article class="card" id="proof-event-stream" style="--accent:#fbbf24">
+  <div class="kicker">Data flow · 09</div>
+  <h2>Order Event Stream <span class="zh">/ 订单事件流</span></h2>
+  <div class="preview"><iframe src="gallery/artifacts/event-stream.dataflow.html?embed=1&amp;theme=dark" title="Order Event Stream" loading="lazy"></iframe></div>
+  <p>Producers, topics, consumers, DLQ, controlled replay.</p>
+  <p class="zh">生产者、Topic、消费者、死信与受控重放。</p>
+  <div class="meta">SHA 16b073c1a557 · 715.1 KB</div>
+  <div class="actions">
+    <a class="primary" href="gallery/artifacts/event-stream.dataflow.html" target="_blank" rel="noopener">Artifact</a>
+    <a href="gallery/sources/event-stream.dataflow.json" target="_blank" rel="noopener">JSON</a>
+    
+    <a href="./start.html">Create</a>
+  </div>
+</article>
+<article class="card" id="proof-agent-run" style="--accent:#fb7185">
+  <div class="kicker">Lifecycle · 10</div>
+  <h2>Agent Run Lifecycle <span class="zh">/ 智能体运行生命周期</span></h2>
+  <div class="preview"><iframe src="gallery/artifacts/agent-run.lifecycle.html?embed=1&amp;theme=dark" title="Agent Run Lifecycle" loading="lazy"></iframe></div>
+  <p>Plan, execute, review, approve, retry, cancel, terminals.</p>
+  <p class="zh">规划、执行、复核、审批、重试、取消与终态。</p>
+  <div class="meta">SHA 2677ca7515ef · 705.1 KB</div>
+  <div class="actions">
+    <a class="primary" href="gallery/artifacts/agent-run.lifecycle.html" target="_blank" rel="noopener">Artifact</a>
+    <a href="gallery/sources/agent-run.lifecycle.json" target="_blank" rel="noopener">JSON</a>
+    
+    <a href="./start.html">Create</a>
+  </div>
+</article>
+<article class="card" id="proof-architecture-delta" style="--accent:#f472b6">
+  <div class="kicker">Architecture · 11</div>
+  <h2>Architecture Delta <span class="zh">/ 架构差分对比</span></h2>
+  <div class="preview"><iframe src="gallery/artifacts/checkout-platform-delta.html?embed=1&amp;theme=dark" title="Architecture Delta" loading="lazy"></iframe></div>
+  <p>Base vs head checkout platform — compare receipt beside HTML.</p>
+  <p class="zh">checkout 平台 base/head 对比，HTML 旁带 receipt。</p>
+  <div class="meta">SHA 44d20d3c88e2 · 2004.3 KB</div>
+  <div class="actions">
+    <a class="primary" href="gallery/artifacts/checkout-platform-delta.html" target="_blank" rel="noopener">Artifact</a>
+    
+    <a href="gallery/sources/checkout-platform.base.architecture.json" target="_blank" rel="noopener">checkout-platform.base.architecture.json</a> <a href="gallery/sources/checkout-platform.head.architecture.json" target="_blank" rel="noopener">checkout-platform.head.architecture.json</a>
+    <a href="./start.html">Create</a>
+  </div>
+</article>
+  </div>
+  <p style="margin-top:2rem"><a href="./guide.html">Guide</a> · <a href="./gallery/manifest.json">manifest.json</a> · <a href="./authoring-cookbook.md">Cookbook</a></p>
 </main>
 </body>
 </html>
