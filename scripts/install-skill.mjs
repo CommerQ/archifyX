@@ -14,6 +14,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { extractZip } from './extract-zip.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
@@ -57,23 +58,6 @@ function copyTree(src, dest) {
   }
 }
 
-function extractZip(zipPath, destParent) {
-  fs.mkdirSync(destParent, { recursive: true });
-  // Prefer tar (Windows 10+ / Git / Unix). Fall back to PowerShell Expand-Archive.
-  const tar = spawnSync('tar', ['-xf', zipPath, '-C', destParent], { encoding: 'utf8' });
-  if (tar.status === 0) return;
-  if (process.platform === 'win32') {
-    const ps = spawnSync(
-      'powershell',
-      ['-NoProfile', '-Command', `Expand-Archive -Force -LiteralPath '${zipPath.replace(/'/g, "''")}' -DestinationPath '${destParent.replace(/'/g, "''")}'`],
-      { encoding: 'utf8' }
-    );
-    if (ps.status === 0) return;
-    die(`failed to extract zip:\n${tar.stderr || ''}\n${ps.stderr || ''}`);
-  }
-  die(`failed to extract zip (install tar): ${tar.stderr || tar.stdout || ''}`);
-}
-
 function prepareSource() {
   const from = path.resolve(fromArg);
   if (!fs.existsSync(from)) die(`--from not found: ${from}`);
@@ -83,7 +67,12 @@ function prepareSource() {
   }
   if (!/\.zip$/i.test(from)) die(`--from must be a skill directory or .zip: ${from}`);
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'archifyx-install-'));
-  extractZip(from, tmp);
+  try {
+    extractZip(from, tmp);
+  } catch (error) {
+    fs.rmSync(tmp, { recursive: true, force: true });
+    die(error.message || String(error));
+  }
   const nested = path.join(tmp, skillName);
   const root = fs.existsSync(path.join(nested, 'SKILL.md'))
     ? nested

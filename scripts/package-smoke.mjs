@@ -5,6 +5,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { extractZip } from './extract-zip.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const pkg = path.join(root, 'archifyX');
@@ -48,6 +49,7 @@ const rootRequired = [
   'scripts/run-tests.mjs',
   'scripts/build-zip.mjs',
   'scripts/install-skill.mjs',
+  'scripts/extract-zip.mjs',
   'scripts/check-release-identity.mjs',
   'scripts/write-deterministic-zip.mjs',
   '.github/workflows/release.yml'
@@ -120,13 +122,18 @@ if (pack.status !== 0) {
   process.stdout.write(pack.stdout || '');
   const extractDir = path.join(tmp, 'out');
   fs.mkdirSync(extractDir);
-  const tar = spawnSync('tar', ['-xf', zipPath, '-C', extractDir], { encoding: 'utf8' });
-  const skillRoot = path.join(extractDir, 'archifyX');
-  if (tar.status !== 0 || !fs.existsSync(path.join(skillRoot, 'SKILL.md'))) {
+  try {
+    extractZip(zipPath, extractDir);
+  } catch (error) {
     console.error('zip extract / layout failed (expected archifyX/SKILL.md)');
-    process.stderr.write(tar.stderr || '');
+    console.error(error.message || error);
     failed = true;
-  } else {
+  }
+  const skillRoot = path.join(extractDir, 'archifyX');
+  if (!failed && !fs.existsSync(path.join(skillRoot, 'SKILL.md'))) {
+    console.error('zip extract / layout failed (expected archifyX/SKILL.md)');
+    failed = true;
+  } else if (!failed) {
     const packedDoctor = spawnSync(process.execPath, [path.join(skillRoot, 'bin', 'archifyX.mjs'), 'doctor'], {
       encoding: 'utf8',
       env: { ...process.env, ARCHIFY_ROOT: '' }
