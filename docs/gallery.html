@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>archifyX Gallery</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0b1220; --text:#f8fafc; --muted:#94a3b8; --accent:#38bdf8; --border:#243044; }
+    body { margin:0; font:15px/1.55 "JetBrains Mono", ui-monospace, Segoe UI, sans-serif; background:var(--bg); color:var(--text); }
+    main { max-width: 56rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+    h1 { font-size:1.4rem; } p { color:var(--muted); } a { color:var(--accent); }
+    .card { border:1px solid var(--border); border-radius:.5rem; padding:1rem 1.1rem; margin-top:1rem; }
+  </style>
+</head>
+<body>
+<main>
+  <p><a href="./index.html">← archifyX</a></p>
+  <h1>Proof Lab (gallery)</h1>
+  <p>Committed proofs for Platform Atlas + leaf samples. Rebuild with <code>node scripts/build-docs.mjs</code>.</p>
+  <div class="card">
+    <strong><a href="../examples/platform-atlas/index.html">Platform Atlas demo</a></strong>
+    <p>Nested tree SPA seeded from skill examples (overview = web-app map; modules as stubs).</p>
+  </div>
+  <div class="card">
+    <strong>Leaf samples</strong>
+    <p>See <code>archifyX/engine/examples/</code> (architecture / workflow / sequence / dataflow / lifecycle).</p>
+  </div>
+</main>
+</body>
+</html>

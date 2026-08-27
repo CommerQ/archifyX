@@ -1,0 +1,18 @@
+name: Showcase
+description: Share a real platform atlas or leaf diagram that worked well
+title: "[showcase] "
+labels: ["showcase"]
+body:
+  - type: textarea
+    id: story
+    attributes:
+      label: What did you map?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Paths, screenshots, or public HTML links (no secrets)
+    validations:
+      required: true

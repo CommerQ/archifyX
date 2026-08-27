@@ -1,0 +1,17 @@
+{
+  "name": "archifyX-repo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "archifyX (Archify eXtension) — Platform Atlas product. Skill + in-tree engine under ./archifyX.",
+  "license": "MIT",
+  "scripts": {
+    "doctor": "node archifyX/bin/archifyX.mjs doctor",
+    "demo": "node archifyX/bin/archifyX.mjs demo examples/demo-out",
+    "build:docs": "node scripts/build-docs.mjs",
+    "test": "node scripts/run-tests.mjs",
+    "smoke": "node scripts/package-smoke.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

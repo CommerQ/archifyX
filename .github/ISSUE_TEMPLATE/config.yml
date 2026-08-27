@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: archifyX docs
+    url: https://github.com/
+    about: Product docs live under /docs in this repository.

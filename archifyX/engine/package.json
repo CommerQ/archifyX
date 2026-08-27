@@ -1,0 +1,30 @@
+{
+  "name": "archifyX-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "In-tree diagram engine for archifyX (architecture / workflow / sequence / dataflow / lifecycle).",
+  "license": "MIT",
+  "bin": {
+    "archifyX-engine": "./bin/archify.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "doctor": "node bin/archify.mjs doctor",
+    "generate:brand-marks": "node scripts/generate-brand-marks.mjs",
+    "check:brand-marks": "node scripts/generate-brand-marks.mjs --check",
+    "generate:validators": "node scripts/generate-validators.mjs",
+    "check:validators": "node scripts/generate-validators.mjs --check",
+    "test:webm": "node test/webm-artifact.smoke.mjs",
+    "render:examples": "node scripts/render-examples.mjs ../examples"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "parse5": "7.3.0",
+    "saxes": "6.0.0",
+    "simple-icons": "16.28.0"
+  }
+}

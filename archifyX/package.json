@@ -1,0 +1,32 @@
+{
+  "name": "archifyX",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Independent Platform Atlas: nested module tree SPA + in-tree diagram engine (A/W/S/D/L).",
+  "license": "MIT",
+  "bin": {
+    "archifyX": "./bin/archifyX.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "doctor": "node bin/archifyX.mjs doctor",
+    "demo": "node bin/archifyX.mjs demo ../examples/demo-out",
+    "validate:example": "node bin/archifyX.mjs validate examples/platform.atlas.json --json",
+    "test": "node bin/archifyX.mjs doctor && node ../scripts/package-smoke.mjs"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "keywords": [
+    "platform-atlas",
+    "architecture",
+    "agent-skill",
+    "diagram",
+    "workflow",
+    "sequence",
+    "dataflow",
+    "lifecycle"
+  ]
+}

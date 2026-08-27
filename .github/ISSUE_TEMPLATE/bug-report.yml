@@ -1,0 +1,33 @@
+name: Bug report
+description: Report a Platform Viewer, atlas IR, or bundled engine problem
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include secrets or private repository contents.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: Commands, atlas JSON snippet, Node version
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Platform Viewer / atlas
+        - Diagram engine (leaf deliver)
+        - CLI / docs / install
+        - Other
+    validations:
+      required: true

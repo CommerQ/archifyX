@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "kind": "platform-atlas",
+  "meta": {
+    "title": "Example Platform Atlas",
+    "locale": "en",
+    "description": "Self-contained sample: overview (delivered web-app map) → nested modules → five diagram types (stubs never 404).",
+    "railPosition": "left"
+  },
+  "overview": {
+    "id": "runtime-overview",
+    "title": "Runtime Overview",
+    "type": "architecture",
+    "summary": "Sample web-app runtime: edge → API → data, plus auth and async work.",
+    "spec": "web-app.architecture.json",
+    "artifact": "web-app-rendered.html"
+  },
+  "modules": [
+    {
+      "id": "identity",
+      "title": "Identity & Session",
+      "summary": "Auth provider boundary, JWT verification, session/token context.",
+      "anchors": ["auth"],
+      "diagrams": [
+        {
+          "id": "identity-architecture",
+          "type": "architecture",
+          "title": "Identity components",
+          "spec": "modules/identity/architecture.json",
+          "artifact": "modules/identity/architecture.html",
+          "status": "planned"
+        },
+        {
+          "id": "identity-sequence",
+          "type": "sequence",
+          "title": "Login sequence",
+          "spec": "modules/identity/sequence.json",
+          "artifact": "modules/identity/sequence.html",
+          "status": "planned"
+        }
+      ]
+    },
+    {
+      "id": "async-jobs",
+      "title": "Async Jobs",
+      "summary": "Queue fan-out and worker execution beside the request path.",
+      "anchors": ["queue", "worker"],
+      "diagrams": [
+        {
+          "id": "async-jobs-architecture",
+          "type": "architecture",
+          "title": "Job components",
+          "spec": "modules/async-jobs/architecture.json",
+          "artifact": "modules/async-jobs/architecture.html",
+          "status": "planned"
+        }
+      ],
+      "children": [
+        {
+          "id": "retry",
+          "title": "Worker Retry",
+          "summary": "Retry / wait / terminal paths for failed jobs.",
+          "anchors": ["worker"],
+          "diagrams": [
+            {
+              "id": "async-jobs-retry-lifecycle",
+              "type": "lifecycle",
+              "title": "Worker retry lifecycle",
+              "spec": "modules/async-jobs/retry/lifecycle.json",
+              "artifact": "modules/async-jobs/retry/lifecycle.html",
+              "status": "planned"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

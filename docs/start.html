@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>archifyX Start</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0b1220; --text:#f8fafc; --muted:#94a3b8; --accent:#38bdf8; --border:#243044; }
+    body { margin:0; font:15px/1.55 "JetBrains Mono", ui-monospace, Segoe UI, sans-serif; background:var(--bg); color:var(--text); }
+    main { max-width: 52rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+    h1 { font-size:1.4rem; } p, li { color:var(--muted); } code, pre { color:var(--text); }
+    pre { background:#020617; border:1px solid var(--border); padding:1rem; overflow:auto; border-radius:.4rem; }
+    a { color:var(--accent); }
+  </style>
+</head>
+<body>
+<main>
+  <p><a href="./index.html">← archifyX</a></p>
+  <h1>Start (Cursor / Claude / Codex)</h1>
+  <p>Link the skill, then ask the agent to build a platform atlas.</p>
+  <pre>mklink /J "%USERPROFILE%\.cursor\skills\archifyX" "D:\workspace\archifyX\archifyX"
+
+cd D:\workspace\archifyX\archifyX
+node bin/archifyX.mjs doctor
+node bin/archifyX.mjs demo ..\examples\demo-out</pre>
+  <p>Agent prompt: <code>用 archifyX 给这个仓库做平台图谱。</code></p>
+  <p>See also <a href="./guide.html">Guide</a> · <a href="./authoring-cookbook.md">Cookbook</a>.</p>
+</main>
+</body>
+</html>

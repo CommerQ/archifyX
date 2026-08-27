@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>archifyX Guide</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0b1220; --text:#f8fafc; --muted:#94a3b8; --accent:#38bdf8; --border:#243044; }
+    body { margin:0; font:15px/1.55 "JetBrains Mono", ui-monospace, Segoe UI, sans-serif; background:var(--bg); color:var(--text); }
+    main { max-width: 52rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+    h1 { font-size:1.4rem; } h2 { font-size:1.05rem; margin-top:1.75rem; }
+    p, li { color:var(--muted); } a { color:var(--accent); }
+    table { border-collapse: collapse; width:100%; margin-top:1rem; }
+    th, td { border:1px solid var(--border); padding:.5rem .65rem; text-align:left; }
+    th { color:var(--text); }
+  </style>
+</head>
+<body>
+<main>
+  <p><a href="./index.html">← archifyX</a></p>
+  <h1>Scenario guide</h1>
+  <p>Pick atlas vs single diagram, then a leaf type. Full recipes: <code>archifyX/recipes/</code> and <code>engine/recipes/</code>.</p>
+  <h2>When to use archifyX</h2>
+  <ul>
+    <li>Many modules / nested packs → <strong>Platform Atlas</strong></li>
+    <li>One bounded map only → still use <code>archifyX deliver</code> (bundled engine)</li>
+  </ul>
+  <h2>Five leaf types</h2>
+  <table>
+    <tr><th>Type</th><th>Use for</th></tr>
+    <tr><td>architecture (A)</td><td>Components, boundaries, storage</td></tr>
+    <tr><td>workflow (W)</td><td>CI/CD, approvals, runbooks</td></tr>
+    <tr><td>sequence (S)</td><td>API / auth / async traces</td></tr>
+    <tr><td>dataflow (D)</td><td>Pipelines, lineage, consumers</td></tr>
+    <tr><td>lifecycle (L)</td><td>States, retries, terminals</td></tr>
+  </table>
+  <p><a href="./gallery.html">Gallery</a> · CLI: <code>node bin/archifyX.mjs guide "场景描述" --json</code></p>
+</main>
+</body>
+</html>

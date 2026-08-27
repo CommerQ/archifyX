@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-platform="true" data-platform-shell="true" data-rail="left" data-platform-rail="open">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="archifyX atlas">
+  <title>Example Platform Atlas</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet" media="print" onload="this.media='all'">
+  <style id="archifyX-css">
+:root, [data-theme="dark"] {
+  --bg: #020617;
+  --text: #ffffff;
+  --text-muted: #94a3b8;
+  --text-faint: #7d8da1;
+  --text-dim: #475569;
+  --panel: rgba(15, 23, 42, 0.5);
+  --panel-border: #334155;
+  --toolbar-bg: rgba(15, 23, 42, 0.92);
+  --toolbar-border: #334155;
+  --toolbar-text: #e2e8f0;
+  --frontend-stroke: #22d3ee;
+  --frontend-fill: rgba(8, 51, 68, 0.4);
+  --backend-stroke: #34d399;
+  --cloud-stroke: #fbbf24;
+  --database-stroke: #a78bfa;
+  --security-stroke: #fb7185;
+  --grid: rgba(148, 163, 184, 0.12);
+}
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --text-faint: #64748b;
+  --text-dim: #94a3b8;
+  --panel: rgba(255, 255, 255, 0.86);
+  --panel-border: #cbd5e1;
+  --toolbar-bg: rgba(255, 255, 255, 0.92);
+  --toolbar-border: #cbd5e1;
+  --toolbar-text: #0f172a;
+  --frontend-stroke: #0891b2;
+  --frontend-fill: rgba(8, 145, 178, 0.12);
+  --backend-stroke: #059669;
+  --cloud-stroke: #d97706;
+  --database-stroke: #7c3aed;
+  --security-stroke: #e11d48;
+  --grid: rgba(100, 116, 139, 0.14);
+}
+/* archifyX Viewer — SPA shell: header + tree + iframe stage. */
+
+html[data-platform="true"] {
+  --platform-rail-width: 18rem;
+  --platform-rail-pad: 0.65rem;
+  --platform-header-height: 3.65rem;
+  --platform-scroll-thumb: color-mix(in srgb, var(--toolbar-border, #334155) 85%, #94a3b8);
+  --platform-scroll-track: transparent;
+  height: 100%;
+  overflow: hidden;
+}
+
+html[data-platform="true"] body {
+  margin: 0;
+  height: 100%;
+  max-height: 100dvh;
+  overflow: hidden;
+  background: var(--bg, #020617);
+  color: var(--text, #fff);
+  font-family: "JetBrains Mono", ui-monospace, "Cascadia Code", "Segoe UI", "PingFang SC", "Microsoft YaHei", monospace;
+}
+
+.platform-app {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
+/* —— Header: brand + Archify chrome controls (locked to design dark bar) —— */
+.platform-header {
+  box-sizing: border-box;
+  flex: 0 0 var(--platform-header-height);
+  height: var(--platform-header-height);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 0.65rem 0 1rem;
+  border-bottom: 1px solid #243044;
+  background: #0b1220;
+  color: #f8fafc;
+  z-index: 80;
+}
+
+.platform-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex: 0 1 auto;
+  min-width: 0;
+  margin-right: auto;
+  color: #f8fafc;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.platform-header-brand::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 999px;
+  background: #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+}
+
+.platform-header > .toolbar,
+.platform-chrome-toolbar {
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.platform-chrome-toolbar > button,
+.platform-chrome-toolbar .preset-wrap > button,
+.platform-chrome-toolbar .export-wrap > button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 2.25rem;
+  padding: 0 0.7rem;
+  border: 1px solid #334155;
+  border-radius: 0.4rem;
+  background: rgba(2, 6, 23, 0.55);
+  color: #e2e8f0;
+  font: inherit;
+  font-size: 0.75rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.12s, color 0.12s, background 0.12s;
+}
+
+.platform-chrome-toolbar > button[hidden] {
+  display: none !important;
+}
+
+.platform-preset-mark {
+  color: var(--frontend-stroke, #22d3ee);
+}
+
+.platform-motion-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: var(--frontend-stroke, #22d3ee);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--frontend-stroke, #22d3ee) 55%, transparent);
+}
+
+#platform-btn-motion[aria-pressed="false"] .platform-motion-dot {
+  background: var(--text-faint, #7d8da1);
+  box-shadow: none;
+}
+
+.platform-chrome-toolbar > button:hover,
+.platform-chrome-toolbar .preset-wrap > button:hover,
+.platform-chrome-toolbar .export-wrap > button:hover {
+  border-color: #38bdf8;
+  color: #f8fafc;
+}
+
+.platform-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+html[data-rail="right"] .platform-body {
+  flex-direction: row-reverse;
+}
+
+/* —— Left tree (scrolls when tall) —— */
+.platform-rail {
+  box-sizing: border-box;
+  flex: 0 0 var(--platform-rail-width);
+  width: var(--platform-rail-width);
+  max-width: var(--platform-rail-width);
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  z-index: 60;
+  padding: 0.65rem var(--platform-rail-pad) 1.1rem;
+  border-right: 1px solid var(--toolbar-border, #334155);
+  background: color-mix(in srgb, var(--bg, #020617) 88%, var(--panel, #0b1220));
+  color: var(--text, #fff);
+  scrollbar-width: thin;
+  scrollbar-color: var(--platform-scroll-thumb) var(--platform-scroll-track);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.platform-rail::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.platform-rail::-webkit-scrollbar-track {
+  background: var(--platform-scroll-track);
+}
+.platform-rail::-webkit-scrollbar-thumb {
+  background: var(--platform-scroll-thumb);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.platform-rail::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--frontend-stroke, #22d3ee) 55%, #64748b);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+
+html[data-rail="right"] .platform-rail {
+  border-right: 0;
+  border-left: 1px solid color-mix(in srgb, var(--toolbar-border, #334155) 70%, transparent);
+}
+
+ul.platform-tree {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.platform-tree ul.platform-tree {
+  margin: 0.1rem 0 0.15rem 0.45rem;
+  padding-left: 0.3rem;
+  border-left: 1px solid color-mix(in srgb, var(--toolbar-border, #334155) 55%, transparent);
+}
+
+.platform-tree-node { margin: 0 0 0.28rem; }
+
+.platform-tree-row {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  min-width: 0;
+  min-height: 2.35rem;
+}
+
+.platform-tree-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.platform-tree-toggle,
+.platform-tree-spacer {
+  flex: 0 0 1rem;
+  width: 1rem;
+  height: 2.35rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text, #fff);
+  cursor: pointer;
+  font-size: 0.78rem;
+  line-height: 2.35rem;
+}
+
+.platform-tree-toggle::before { content: "▸"; }
+
+.platform-tree-node[data-expanded="true"] > .platform-tree-row > .platform-tree-toggle::before {
+  content: "▾";
+}
+
+.platform-tree-node[data-expanded="false"] > .platform-tree-kids {
+  display: none;
+}
+
+/* icons: same row as title, flush right */
+.platform-type-icons {
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.22rem;
+  margin: 0;
+  margin-left: auto;
+}
+
+a.platform-type-icon {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 0.26rem;
+  border: 1px solid color-mix(in srgb, var(--toolbar-border, #334155) 80%, transparent);
+  color: var(--text-faint, #7d8da1);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-decoration: none;
+  line-height: 1;
+}
+
+a.platform-type-icon:hover,
+a.platform-type-icon:focus-visible {
+  outline: none;
+  color: var(--text, #fff);
+  border-color: var(--frontend-stroke, #22d3ee);
+}
+
+a.platform-type-icon.is-ready {
+  color: var(--backend-stroke, #34d399);
+  border-color: color-mix(in srgb, var(--backend-stroke, #34d399) 55%, transparent);
+}
+
+a.platform-type-icon.is-pending {
+  color: var(--cloud-stroke, #fbbf24);
+  border-color: color-mix(in srgb, var(--cloud-stroke, #fbbf24) 40%, transparent);
+}
+
+a.platform-type-icon.is-active {
+  color: var(--frontend-stroke, #22d3ee);
+  border-color: var(--frontend-stroke, #22d3ee);
+  background: color-mix(in srgb, var(--frontend-fill, rgba(8, 51, 68, 0.4)) 55%, transparent);
+}
+
+.platform-tree-kids {
+  margin: 0 0 0.1rem 1.05rem;
+}
+
+a.platform-rail-module {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0.48rem 0.25rem 0.48rem 0.25rem;
+  border: 0;
+  border-radius: 0.35rem;
+  border-left: 2px solid transparent;
+  color: inherit;
+  text-decoration: none;
+  background: transparent;
+  transition: color 0.12s, background 0.12s, border-color 0.12s;
+  cursor: pointer;
+}
+
+a.platform-rail-module:hover,
+a.platform-rail-module:focus-visible {
+  color: var(--text, #fff);
+  background: color-mix(in srgb, var(--panel, rgba(15, 23, 42, 0.5)) 55%, transparent);
+  outline: none;
+}
+
+a.platform-rail-module[aria-current="page"],
+a.platform-rail-module.is-active {
+  color: var(--text, #fff);
+  border-left-color: var(--frontend-stroke, #22d3ee);
+  background: color-mix(in srgb, var(--frontend-fill, rgba(8, 51, 68, 0.4)) 45%, transparent);
+}
+
+a.platform-rail-module .idx {
+  flex: 0 0 auto;
+  color: var(--text, #fff);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+a.platform-rail-module[aria-current="page"] .idx,
+a.platform-rail-module.is-active .idx {
+  color: var(--frontend-stroke, #22d3ee);
+}
+
+a.platform-rail-module .title {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--text, #fff);
+  font-size: 1.02rem;
+  font-weight: 500;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+a.platform-rail-module .meta {
+  display: none; /* keep row compact; icons carry type affordance */
+}
+
+/* —— Right iframe stage (red-box: never escape shell) —— */
+.platform-frame {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  border: 0;
+  background: var(--bg, #020617);
+  overflow: hidden;
+}
+
+.platform-stage {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--platform-scroll-thumb) var(--platform-scroll-track);
+}
+
+.platform-stage::-webkit-scrollbar { width: 10px; height: 10px; }
+.platform-stage::-webkit-scrollbar-track { background: var(--platform-scroll-track); }
+.platform-stage::-webkit-scrollbar-thumb {
+  background: var(--platform-scroll-thumb);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Full-bleed content — no fixed reader width */
+html[data-platform="true"] .platform-stage .container,
+html[data-platform-pane="true"] .container {
+  max-width: none !important;
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+html[data-platform="true"] {
+  --archify-reader-width: 100%;
+}
+
+/* Present: collapse chrome */
+html[data-present="true"] .platform-header,
+html[data-embed="true"] .platform-header,
+html[data-present="true"] .platform-rail,
+html[data-embed="true"] .platform-rail {
+  display: none !important;
+}
+
+html[data-present="true"] .platform-body,
+html[data-embed="true"] .platform-body {
+  height: 100dvh;
+}
+
+html[data-present="true"] .platform-frame,
+html[data-embed="true"] .platform-frame {
+  height: 100dvh;
+}
+
+/* Pane pages inside the iframe — fill the stage, never scroll the frame */
+html[data-platform-pane="true"] {
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+  --archify-reader-width: 100%;
+}
+
+html[data-platform-pane="true"] body {
+  height: 100% !important;
+  max-height: 100% !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0.65rem !important;
+  overflow: hidden !important;
+  overscroll-behavior: none;
+  background-attachment: scroll !important;
+}
+
+html[data-platform-pane="true"] .container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.5rem !important;
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: none !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+html[data-platform-pane="true"] .header,
+html[data-platform-pane="true"] .guided-views {
+  flex: none !important;
+  margin: 0 !important;
+}
+
+html[data-platform-pane="true"] .header {
+  margin-bottom: 0 !important;
+  padding-right: 0 !important;
+}
+
+html[data-platform-pane="true"] .header .subtitle,
+html[data-platform-pane="true"] p.subtitle {
+  display: block !important;
+  visibility: visible !important;
+  height: auto !important;
+  margin: 0.2rem 0 0 1.75rem !important;
+  padding: 0 !important;
+  color: var(--text-muted, #94a3b8) !important;
+  font-size: 0.72rem !important;
+  font-weight: 400 !important;
+  line-height: 1.35 !important;
+}
+
+/* Keep insight cards visible; shrink diagram to leave room (no frame scroll) */
+html[data-platform-pane="true"] .cards {
+  display: grid !important;
+  flex: none !important;
+  margin: 0 !important;
+  min-height: 0 !important;
+  max-height: 28% !important;
+  overflow: auto !important;
+  gap: 0.45rem !important;
+}
+
+html[data-platform-pane="true"] .cards .card {
+  padding: 0.55rem 0.65rem !important;
+}
+
+html[data-platform-pane="true"] .diagram-container {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: hidden !important;
+  padding: 0.5rem !important;
+  padding-bottom: calc(0.5rem + var(--archify-nav-reserve, 3.5rem)) !important;
+}
+
+html[data-platform-pane="true"] .diagram-container > svg {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  max-height: 100% !important;
+}
+
+/* Clicking empty diagram focuses the SVG; kill the browser focus box. */
+html[data-platform-pane="true"] .diagram-container:focus,
+html[data-platform-pane="true"] .diagram-container:focus-visible,
+html[data-platform-pane="true"] .diagram-container > svg:focus,
+html[data-platform-pane="true"] .diagram-container > svg:focus-visible,
+html[data-platform-pane="true"] svg:focus,
+html[data-platform-pane="true"] svg:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+html[data-platform-pane="true"] .toolbar {
+  position: fixed !important;
+  top: 0.35rem !important;
+  right: 0.5rem !important;
+  left: auto !important;
+  z-index: 10050 !important;
+  display: flex !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  pointer-events: none;
+}
+
+/* Shell header owns the visible chrome; keep iframe controls sized for menu anchors. */
+html[data-platform-pane="true"] .toolbar > button,
+html[data-platform-pane="true"] .toolbar > .preset-wrap > #btn-preset,
+html[data-platform-pane="true"] .toolbar > .export-wrap > #btn-export,
+html[data-platform-pane="true"] .toolbar > #btn-motion {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  color: transparent !important;
+}
+
+html[data-platform-pane="true"] .toolbar > .preset-wrap,
+html[data-platform-pane="true"] .toolbar > .export-wrap {
+  position: relative;
+  pointer-events: none;
+}
+
+html[data-platform-pane="true"] .toolbar .preset-menu,
+html[data-platform-pane="true"] .toolbar .export-menu {
+  pointer-events: auto !important;
+  z-index: 10060 !important;
+}
+
+@media (max-width: 860px) {
+  html[data-platform="true"] {
+    --platform-rail-width: 14rem;
+  }
+}
+
+  </style>
+</head>
+<body>
+<div class="platform-app" id="platform-app">
+  <header class="platform-header" id="platform-header">
+    <div class="platform-header-brand">Example Platform Atlas</div>
+    <div class="platform-chrome-toolbar" id="platform-chrome-toolbar" role="toolbar" aria-label="Diagram actions">
+  <button type="button" id="platform-btn-theme" data-archify-proxy="btn-theme" aria-pressed="false" title="Toggle theme (T)">
+    <span aria-hidden="true">☾</span><span data-label>Dark</span>
+  </button>
+  <button type="button" id="platform-btn-preset" data-archify-proxy="btn-preset" title="Visual style (S)">
+    <span aria-hidden="true" class="platform-preset-mark">◌</span><span data-label>Classic</span><span aria-hidden="true">▾</span>
+  </button>
+  <button type="button" id="platform-btn-motion" data-archify-proxy="btn-motion" hidden aria-pressed="true" title="Motion">
+    <span aria-hidden="true" class="platform-motion-dot"></span><span data-label>Live</span>
+  </button>
+  <button type="button" id="platform-btn-present" data-archify-proxy="btn-present" aria-pressed="false" title="Present (F)">
+    <span aria-hidden="true">⛶</span><span data-label>Present</span>
+  </button>
+  <button type="button" id="platform-btn-export" data-archify-proxy="btn-export" title="Export (E)">
+    <span data-label>Export</span><span aria-hidden="true">▾</span>
+  </button>
+</div>
+  </header>
+  <div class="platform-body" id="platform-body">
+    <!-- archifyX:viewer:start -->
+<aside class="platform-rail no-print" id="platform-rail" aria-label="Module tree">
+  <a class="platform-rail-module" href="./web-app-rendered.html" aria-current="page">
+      <span class="idx">OV</span>
+      <span class="title">Runtime Overview</span>
+    </a>
+  <ul class="platform-tree" id="platform-tree"><li class="platform-tree-node" data-module-id="identity" data-expanded="false" data-depth="0">
+  <div class="platform-tree-row">
+    <span class="platform-tree-spacer" aria-hidden="true"></span>
+    <div class="platform-tree-main">
+      <a class="platform-rail-module" href="./modules/identity/architecture.html" title="Identity &amp; Session · 2/2">
+        <span class="idx">01</span>
+        <span class="title">Identity &amp; Session</span>
+      </a>
+      <span class="platform-type-icons" role="group" aria-label="Diagram types"><a class="platform-type-icon accent-backend is-ready " href="./modules/identity/architecture.html" title="Architecture · delivered" aria-label="Architecture" data-type="architecture">A</a><a class="platform-type-icon accent-frontend is-ready " href="./modules/identity/sequence.html" title="Sequence · delivered" aria-label="Sequence" data-type="sequence">S</a></span>
+    </div>
+  </div>
+  
+</li>
+<li class="platform-tree-node" data-module-id="async-jobs" data-expanded="false" data-depth="0">
+  <div class="platform-tree-row">
+    <button type="button" class="platform-tree-toggle" aria-expanded="false" aria-label="Expand/collapse"></button>
+    <div class="platform-tree-main">
+      <a class="platform-rail-module" href="./modules/async-jobs/architecture.html" title="Async Jobs · 1/1 · 1c">
+        <span class="idx">02</span>
+        <span class="title">Async Jobs</span>
+      </a>
+      <span class="platform-type-icons" role="group" aria-label="Diagram types"><a class="platform-type-icon accent-backend is-ready " href="./modules/async-jobs/architecture.html" title="Architecture · delivered" aria-label="Architecture" data-type="architecture">A</a></span>
+    </div>
+  </div>
+  <div class="platform-tree-kids"><ul class="platform-tree"><li class="platform-tree-node" data-module-id="retry" data-expanded="false" data-depth="1">
+  <div class="platform-tree-row">
+    <span class="platform-tree-spacer" aria-hidden="true"></span>
+    <div class="platform-tree-main">
+      <a class="platform-rail-module" href="./modules/async-jobs/retry/lifecycle.html" title="Worker Retry · 1/1">
+        <span class="idx">02.retry</span>
+        <span class="title">Worker Retry</span>
+      </a>
+      <span class="platform-type-icons" role="group" aria-label="Diagram types"><a class="platform-type-icon accent-security is-ready " href="./modules/async-jobs/retry/lifecycle.html" title="Lifecycle · delivered" aria-label="Lifecycle" data-type="lifecycle">L</a></span>
+    </div>
+  </div>
+  
+</li></ul></div>
+</li></ul>
+</aside>
+<!-- archifyX:viewer:end -->
+    <iframe class="platform-frame" id="platform-frame" title="Diagram stage" data-default-src="./web-app-rendered.html" src="./web-app-rendered.html"></iframe>
+  </div>
+</div>
+<script id="archifyX-js">
+/**
+ * archifyX Viewer — SPA shell.
+ * Header chrome proxies Archify toolbar; left tree navigates right iframe.
+ */
+(function () {
+  var html = document.documentElement;
+  if (html.getAttribute('data-platform') !== 'true') return;
+
+  var isShell = html.getAttribute('data-platform-shell') === 'true';
+  var rail = document.getElementById('platform-rail');
+  var frame = document.getElementById('platform-frame');
+  var stage = document.getElementById('platform-stage');
+  var presentWatch = null;
+
+  function shellBaseUrl() {
+    // Resolve relative diagram hrefs against the shell document directory,
+    // never against ?view=… (that used to break nested navigation).
+    try {
+      var href = window.location.href.split('#')[0].split('?')[0];
+      if (/\/$/i.test(href)) return href;
+      return href.replace(/[^/]+$/, '');
+    } catch (_) {
+      return window.location.origin + '/';
+    }
+  }
+
+  function resolveHref(href) {
+    if (!href || href === '#') return href;
+    try {
+      return new URL(href, shellBaseUrl()).href;
+    } catch (_) {
+      return href;
+    }
+  }
+
+  function viewKey(href) {
+    try {
+      var url = new URL(resolveHref(href), shellBaseUrl());
+      var path = url.pathname.replace(/\\/g, '/');
+      var basePath = new URL(shellBaseUrl()).pathname.replace(/\\/g, '/');
+      if (basePath && path.indexOf(basePath) === 0) {
+        path = path.slice(basePath.length);
+      }
+      // serve often redirects *.html → extensionless; normalize so tree active matches.
+      return path.replace(/^\//, '').replace(/\.html?$/i, '');
+    } catch (_) {
+      return String(href || '')
+        .replace(/^\.\//, '')
+        .replace(/[?#].*$/, '')
+        .replace(/\.html?$/i, '');
+    }
+  }
+
+  function isPresent() {
+    return html.getAttribute('data-present') === 'true' || html.getAttribute('data-embed') === 'true';
+  }
+
+  function setPresent(hide) {
+    if (hide) html.setAttribute('data-present', 'true');
+    else html.removeAttribute('data-present');
+    if (!rail) return;
+    rail.hidden = hide;
+    rail.setAttribute('aria-hidden', hide ? 'true' : 'false');
+    html.setAttribute('data-platform-rail', hide ? 'collapsed' : 'open');
+  }
+
+  function sameView(a, b) {
+    if (!a || !b) return false;
+    return viewKey(a) === viewKey(b);
+  }
+
+  function markActive(href) {
+    var links = document.querySelectorAll(
+      '#platform-rail a.platform-rail-module, #platform-rail a.platform-type-icon'
+    );
+    var key = viewKey(href);
+    var exactNodes = [];
+    for (var i = 0; i < links.length; i += 1) {
+      var link = links[i];
+      var linkKey = viewKey(link.getAttribute('href'));
+      var exact = linkKey === key;
+      link.classList.toggle('is-active', exact);
+      if (exact) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+      if (exact) {
+        var node = link.closest('.platform-tree-node');
+        if (node) exactNodes.push(node);
+        while (node) {
+          node.setAttribute('data-expanded', 'true');
+          var btn = node.querySelector(':scope > .platform-tree-row > .platform-tree-toggle');
+          if (btn) btn.setAttribute('aria-expanded', 'true');
+          node = node.parentElement ? node.parentElement.closest('.platform-tree-node') : null;
+        }
+      }
+    }
+    // Keep the module title row lit when a type icon (A/S/…) under it is current.
+    for (var n = 0; n < exactNodes.length; n += 1) {
+      var mod = exactNodes[n].querySelector(':scope > .platform-tree-row a.platform-rail-module');
+      if (!mod) continue;
+      mod.classList.add('is-active');
+    }
+  }
+
+  function fitPane(doc) {
+    if (!doc) return;
+    try {
+      var win = doc.defaultView;
+      if (!win || !win.Archify) return;
+      var A = win.Archify;
+      if (A.readerLayout) {
+        if (typeof A.readerLayout.measure === 'function') A.readerLayout.measure();
+        if (typeof A.readerLayout.schedule === 'function') A.readerLayout.schedule();
+      }
+      if (A.viewerChromeLayout && typeof A.viewerChromeLayout.schedule === 'function') {
+        A.viewerChromeLayout.schedule();
+      }
+      if (A.view && typeof A.view.reset === 'function') A.view.reset();
+    } catch (_) {}
+  }
+
+  function sanitizePane(doc) {
+    if (!doc || !doc.documentElement) return;
+    try {
+      // Keep at most one subtitle (rebuild stacking left multiples historically).
+      var subs = doc.querySelectorAll('.header .subtitle, .header p.subtitle, p.subtitle');
+      for (var i = 1; i < subs.length; i += 1) {
+        if (subs[i] && subs[i].parentNode) subs[i].parentNode.removeChild(subs[i]);
+      }
+      doc.documentElement.setAttribute('data-platform-pane', 'true');
+      doc.documentElement.style.setProperty('height', '100%', 'important');
+      doc.documentElement.style.setProperty('max-height', '100%', 'important');
+      doc.documentElement.style.setProperty('overflow', 'hidden', 'important');
+      if (doc.body) {
+        doc.body.style.setProperty('height', '100%', 'important');
+        doc.body.style.setProperty('max-height', '100%', 'important');
+        doc.body.style.setProperty('min-height', '0', 'important');
+        doc.body.style.setProperty('padding', '0.65rem', 'important');
+        doc.body.style.setProperty('overflow', 'hidden', 'important');
+        doc.body.style.setProperty('overscroll-behavior', 'none');
+      }
+      fitPane(doc);
+      window.setTimeout(function () { fitPane(doc); }, 80);
+      window.setTimeout(function () { fitPane(doc); }, 320);
+    } catch (_) {}
+  }
+
+  function navigate(href, push) {
+    if (!frame || !href || href === '#') return;
+    var next = resolveHref(href);
+    try {
+      var u = new URL(next);
+      // Bust stale pane HTML that still had stacked subtitles.
+      u.searchParams.set('_pt', String(Date.now()));
+      next = u.href;
+    } catch (_) {}
+    frame.src = next;
+    markActive(href);
+    if (push !== false) {
+      try {
+        var rel = viewKey(href);
+        var url = new URL(window.location.href);
+        url.searchParams.set('view', rel);
+        history.pushState({ view: rel }, '', url);
+      } catch (_) {}
+    }
+  }
+
+  function iframeDoc() {
+    try { return frame && frame.contentDocument; } catch (_) { return null; }
+  }
+
+  function syncPresentFromFrame() {
+    var doc = iframeDoc();
+    if (!doc || !doc.documentElement) return;
+    var present =
+      doc.documentElement.getAttribute('data-present') === 'true' ||
+      doc.documentElement.getAttribute('data-embed') === 'true';
+    setPresent(present);
+    syncChromeLabels();
+  }
+
+  function watchFramePresent() {
+    if (presentWatch) {
+      try { presentWatch.disconnect(); } catch (_) {}
+      presentWatch = null;
+    }
+    var doc = iframeDoc();
+    if (!doc || !doc.documentElement || typeof MutationObserver === 'undefined') return;
+    presentWatch = new MutationObserver(function (mutations) {
+      var presetChanged = false;
+      for (var i = 0; i < mutations.length; i += 1) {
+        if (mutations[i].attributeName === 'data-preset') presetChanged = true;
+      }
+      syncPresentFromFrame();
+      syncChromeLabels();
+      if (presetChanged) rememberPresetFromPane(doc);
+    });
+    presentWatch.observe(doc.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-present', 'data-embed', 'data-theme', 'data-preset', 'data-motion', 'style']
+    });
+    var motionBtn = doc.getElementById('btn-motion');
+    if (motionBtn) {
+      presentWatch.observe(motionBtn, {
+        attributes: true,
+        attributeFilter: ['hidden', 'aria-pressed', 'title', 'disabled']
+      });
+    }
+    syncPresentFromFrame();
+    syncChromeLabels();
+  }
+
+  var PRESET_KEY = 'archify-preset';
+  var restoringPreset = false;
+
+  function readStoredPreset() {
+    try {
+      return localStorage.getItem(PRESET_KEY);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function writeStoredPreset(preset) {
+    if (!preset) return;
+    try {
+      localStorage.setItem(PRESET_KEY, preset);
+    } catch (_) {}
+  }
+
+  function syncThemeFromPane(doc) {
+    if (!doc || !doc.documentElement || !doc.defaultView) return;
+    try {
+      var src = doc.documentElement;
+      var theme = src.getAttribute('data-theme');
+      var preset = src.getAttribute('data-preset');
+      if (theme) html.setAttribute('data-theme', theme);
+      else html.removeAttribute('data-theme');
+      if (preset) html.setAttribute('data-preset', preset);
+      else {
+        // Keep shell on the last chosen preset if the pane briefly clears it
+        // (node focus / remount can flash "classic" otherwise).
+        var kept = readStoredPreset();
+        if (kept) html.setAttribute('data-preset', kept);
+        else html.removeAttribute('data-preset');
+      }
+
+      // Mirror Archify CSS variables onto the shell so header/rail match the diagram.
+      var cs = doc.defaultView.getComputedStyle(src);
+      for (var i = 0; i < cs.length; i += 1) {
+        var name = cs[i];
+        if (name && name.indexOf('--') === 0) {
+          var value = cs.getPropertyValue(name).trim();
+          if (value) html.style.setProperty(name, value);
+        }
+      }
+      if (document.body) {
+        document.body.style.background = 'var(--bg)';
+        document.body.style.color = 'var(--text)';
+      }
+    } catch (_) {}
+  }
+
+  function applyStoredPreset(doc) {
+    if (!doc || !doc.defaultView) return;
+    if (!readStoredPreset()) return;
+    restoringPreset = true;
+    var deadline = Date.now() + 2000;
+    var stableSince = 0;
+    function tick() {
+      var wanted = readStoredPreset();
+      if (!wanted) {
+        restoringPreset = false;
+        return;
+      }
+      try {
+        var A = doc.defaultView.Archify;
+        if (A && A.preset && typeof A.preset.apply === 'function') {
+          var current = doc.documentElement.getAttribute('data-preset');
+          if (current !== wanted) {
+            A.preset.apply(wanted);
+            stableSince = 0;
+            syncChromeLabels();
+          } else if (!stableSince) {
+            stableSince = Date.now();
+            syncChromeLabels();
+          } else if (Date.now() - stableSince >= 400) {
+            restoringPreset = false;
+            syncChromeLabels();
+            return;
+          }
+        } else {
+          doc.documentElement.setAttribute('data-preset', wanted);
+          var svg = doc.querySelector('.diagram-container > svg, svg');
+          if (svg) svg.setAttribute('data-preset', wanted);
+        }
+      } catch (_) {}
+      if (Date.now() < deadline) window.setTimeout(tick, 80);
+      else {
+        restoringPreset = false;
+        syncChromeLabels();
+      }
+    }
+    tick();
+  }
+
+  var rememberTimer = null;
+
+  function rememberPresetFromPane(doc) {
+    // While restoring, ignore authored "classic" flashes so they don't wipe storage.
+    // Debounce so brief focus/remount attribute flickers don't stick.
+    if (restoringPreset || !doc || !doc.documentElement) return;
+    var preset = doc.documentElement.getAttribute('data-preset');
+    if (!preset) return;
+    if (rememberTimer) window.clearTimeout(rememberTimer);
+    rememberTimer = window.setTimeout(function () {
+      rememberTimer = null;
+      if (restoringPreset) return;
+      var now = doc.documentElement.getAttribute('data-preset');
+      if (now) writeStoredPreset(now);
+    }, 280);
+  }
+
+  function syncMotionButton(doc) {
+    var proxy = document.getElementById('platform-btn-motion');
+    if (!proxy) return;
+    var src = doc && doc.getElementById('btn-motion');
+    if (!src) {
+      proxy.hidden = true;
+      return;
+    }
+    var visible = !src.hidden && getComputedStyle(src).display !== 'none';
+    proxy.hidden = !visible;
+    if (!visible) return;
+    var srcLabel = doc.getElementById('motion-label');
+    var dstLabel = proxy.querySelector('[data-label]');
+    if (srcLabel && dstLabel) dstLabel.textContent = srcLabel.textContent;
+    var pressed = src.getAttribute('aria-pressed');
+    if (pressed != null) proxy.setAttribute('aria-pressed', pressed);
+    if (src.title) proxy.title = src.title;
+  }
+
+  function syncChromeLabels() {
+    var doc = iframeDoc();
+    if (!doc) return;
+    var map = [
+      ['platform-btn-theme', 'theme-label', 'btn-theme'],
+      ['platform-btn-preset', 'preset-label', 'btn-preset'],
+      ['platform-btn-motion', 'motion-label', 'btn-motion'],
+      ['platform-btn-present', 'present-label', 'btn-present'],
+      ['platform-btn-export', null, 'btn-export']
+    ];
+    for (var i = 0; i < map.length; i += 1) {
+      var proxyId = map[i][0];
+      var labelId = map[i][1];
+      var srcId = map[i][2];
+      var proxy = document.getElementById(proxyId);
+      var src = doc.getElementById(srcId);
+      if (!proxy || !src) continue;
+      if (labelId) {
+        var srcLabel = doc.getElementById(labelId);
+        var dstLabel = proxy.querySelector('[data-label]');
+        if (srcLabel && dstLabel) dstLabel.textContent = srcLabel.textContent;
+      }
+      var pressed = src.getAttribute('aria-pressed');
+      if (pressed != null) proxy.setAttribute('aria-pressed', pressed);
+      if (src.title) proxy.title = src.title;
+    }
+    syncMotionButton(doc);
+    syncThemeFromPane(doc);
+  }
+
+  function proxyArchify(id) {
+    var doc = iframeDoc();
+    if (!doc) return;
+    var btn = doc.getElementById(id);
+    if (btn) btn.click();
+    window.setTimeout(function () {
+      syncChromeLabels();
+      if (id === 'btn-preset') rememberPresetFromPane(iframeDoc());
+    }, 50);
+    window.setTimeout(function () {
+      syncChromeLabels();
+      if (id === 'btn-preset') rememberPresetFromPane(iframeDoc());
+    }, 220);
+    window.setTimeout(syncPresentFromFrame, 80);
+  }
+
+  function wireChromeToolbar() {
+    var host = document.getElementById('platform-chrome-toolbar');
+    if (!host) return;
+    host.addEventListener('click', function (event) {
+      var btn = event.target.closest('[data-archify-proxy]');
+      if (!btn || !host.contains(btn)) return;
+      event.preventDefault();
+      proxyArchify(btn.getAttribute('data-archify-proxy'));
+    });
+  }
+
+  function unlockReaderWidth(doc) {
+    if (!doc || !doc.documentElement) return;
+    doc.documentElement.style.setProperty('--archify-reader-width', '100%');
+    doc.documentElement.setAttribute('data-reader-layout', 'adaptive');
+    doc.documentElement.removeAttribute('data-reader-overflow');
+    try {
+      if (doc.defaultView && doc.defaultView.Archify && doc.defaultView.Archify.readerLayout) {
+        var layout = doc.defaultView.Archify.readerLayout;
+        if (!layout.__platformFullWidth) {
+          layout.measure = function () {
+            return { width: Math.max(480, doc.documentElement.clientWidth || 1200), platform: true };
+          };
+          layout.schedule = function () {
+            doc.documentElement.style.setProperty('--archify-reader-width', '100%');
+          };
+          layout.__platformFullWidth = true;
+        }
+      }
+    } catch (_) {}
+  }
+
+  function onFrameLoad() {
+    var doc = iframeDoc();
+    watchFramePresent();
+    unlockReaderWidth(doc);
+    sanitizePane(doc);
+    // Restore visual style across SPA navigations (Archify only persists theme).
+    applyStoredPreset(doc);
+    syncChromeLabels();
+    try {
+      var path = frame.contentWindow && frame.contentWindow.location
+        ? frame.contentWindow.location.href
+        : frame.src;
+      markActive(path);
+    } catch (_) {
+      markActive(frame.getAttribute('src'));
+    }
+  }
+
+  var tree = document.getElementById('platform-tree');
+  if (tree) {
+    tree.addEventListener('click', function (event) {
+      var btn = event.target.closest('.platform-tree-toggle');
+      if (!btn || !tree.contains(btn)) return;
+      event.preventDefault();
+      var node = btn.closest('.platform-tree-node');
+      if (!node) return;
+      var open = node.getAttribute('data-expanded') === 'true';
+      node.setAttribute('data-expanded', open ? 'false' : 'true');
+      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+    });
+  }
+
+  if (isShell && rail && frame) {
+    wireChromeToolbar();
+    rail.addEventListener('click', function (event) {
+      var link = event.target.closest('a.platform-rail-module, a.platform-type-icon');
+      if (!link || !rail.contains(link)) return;
+      var href = link.getAttribute('href');
+      if (!href || href === '#' || href.indexOf('javascript:') === 0) return;
+      event.preventDefault();
+      event.stopPropagation();
+      navigate(href, true);
+    });
+    frame.addEventListener('load', onFrameLoad);
+    window.addEventListener('popstate', function () {
+      var params = new URLSearchParams(window.location.search);
+      var view = params.get('view');
+      if (view) navigate(view, false);
+    });
+    var start = null;
+    try { start = new URLSearchParams(window.location.search).get('view'); } catch (_) {}
+    if (!start) start = frame.getAttribute('data-default-src') || frame.getAttribute('src');
+    if (start) {
+      var cur = frame.getAttribute('src') || '';
+      if (viewKey(cur) !== viewKey(start)) navigate(start, false);
+      else markActive(start);
+    }
+  }
+
+  if (!isShell && stage && rail) {
+    function syncPresent() {
+      var hide = isPresent();
+      rail.hidden = hide;
+      rail.setAttribute('aria-hidden', hide ? 'true' : 'false');
+      html.setAttribute('data-platform-rail', hide ? 'collapsed' : 'open');
+    }
+    syncPresent();
+    if (typeof MutationObserver !== 'undefined') {
+      new MutationObserver(function (records) {
+        for (var i = 0; i < records.length; i += 1) {
+          if (records[i].attributeName === 'data-present' || records[i].attributeName === 'data-embed') {
+            syncPresent();
+            break;
+          }
+        }
+      }).observe(html, { attributes: true, attributeFilter: ['data-present', 'data-embed'] });
+    }
+    html.style.setProperty('--archify-reader-width', '100%');
+  }
+})();
+
+</script>
+</body>
+</html>
