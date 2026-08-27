@@ -10,10 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18, 20, 22]
+        # Node 18/20 EOL on Actions runners — test current LTS + active.
+        node-version: [22, 24]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node-version }}
       - name: Package smoke (self-contained + pack)
@@ -26,16 +27,17 @@ jobs:
   pack:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
+          # Canonical ZIP bytes depend on Node/zlib major; keep on 22.
           node-version: 22
       - name: Release identity
         run: node scripts/check-release-identity.mjs
       - name: Canonical ZIP (Node 22)
         run: node scripts/build-zip.mjs
       - name: Upload archifyX.zip
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: archifyX-zip
           path: archifyX.zip
