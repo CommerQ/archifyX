@@ -43,6 +43,19 @@ Ask your agent: `Use archifyX to build a platform atlas for this repository.`
 
 ## Install as a skill
 
+Full matrix: [docs/install.md](docs/install.md) · [docs/start.html](docs/start.html)
+
+```bash
+# Recommended — skills CLI
+npx -y skills add CommerQ/archifyX --skill archifyX --agent cursor --global --copy --yes
+
+# Or pack + install from this repo (Node 22 for canonical ZIP)
+npm run pack:local
+npm run install:skill -- --agent cursor --from archifyX.zip --force
+```
+
+Windows junction (dev):
+
 ```bat
 mklink /J "%USERPROFILE%\.cursor\skills\archifyX" "D:\workspace\archifyX\archifyX"
 ```

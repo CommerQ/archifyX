@@ -27,7 +27,7 @@
 | `benchmarks/` | ✅ | ❌ | ⏳ |
 | `experiments/` | ✅ | ❌ | ❌ 研究场，不搬 |
 | `docs/research-*` 数十篇 | ✅ | ❌ | ❌ 不搬 |
-| `archify.zip` 发行物 | ✅ | ❌ | ⏳ release 时再做 |
+| `archify.zip` 发行物 | ✅ | ✅ `archifyX.zip` + pack CI | ✅ |
 
 ---
 
@@ -76,8 +76,9 @@ Archify 的 `renderers/ brand-marks/ delta/ recipes/ test/` 在我们这边应�
 - docs/assets 真实截图 / hero
 - guide CLI 合并 platform recipes
 - engine 全量 test 进 CI
-- integrations / benchmarks / release zip
+- integrations / benchmarks
 - GitHub Pages 发布 docs/
+- GitHub Release 自动挂载 `archifyX.zip`
 
 ---
 

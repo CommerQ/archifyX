@@ -15,7 +15,7 @@ Current line: `v0.1.0`.
 - Platform Proof Lab gallery
 - Stricter delivered-vs-stub counts in `build-index --json`
 - SPA chrome `visual-check` evidence helper
-- Multi-agent install matrix docs
+- GitHub Release attach for `archifyX.zip`
 
 ## Not planned
 

@@ -10,3 +10,5 @@ archifyX/examples/modules/
 .idea/
 .vscode/
 archifyX/engine/node_modules/
+archifyX.zip
+.*.tmp

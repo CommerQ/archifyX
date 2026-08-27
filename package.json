@@ -1,5 +1,5 @@
 {
-  "name": "archifyX-repo",
+  "name": "archifyx",
   "version": "0.1.0",
   "private": true,
   "description": "archifyX (Archify eXtension) — Platform Atlas product. Skill + in-tree engine under ./archifyX.",
@@ -9,7 +9,11 @@
     "demo": "node archifyX/bin/archifyX.mjs demo examples/demo-out",
     "build:docs": "node scripts/build-docs.mjs",
     "test": "node scripts/run-tests.mjs",
-    "smoke": "node scripts/package-smoke.mjs"
+    "smoke": "node scripts/package-smoke.mjs",
+    "pack": "node scripts/build-zip.mjs",
+    "pack:local": "node scripts/build-zip.mjs --workdir --any-node",
+    "install:skill": "node scripts/install-skill.mjs",
+    "check:identity": "node scripts/check-release-identity.mjs"
   },
   "engines": {
     "node": ">=18"

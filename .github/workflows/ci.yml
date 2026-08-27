@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [master, main]
   pull_request:
 
 jobs:
@@ -16,9 +16,26 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Package smoke (self-contained)
+      - name: Package smoke (self-contained + pack)
         run: node scripts/package-smoke.mjs
       - name: Atlas smoke
         run: node archifyX/test/atlas-smoke.mjs
       - name: Demo build
         run: node archifyX/bin/archifyX.mjs demo examples/demo-out
+
+  pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Release identity
+        run: node scripts/check-release-identity.mjs
+      - name: Canonical ZIP (Node 22)
+        run: node scripts/build-zip.mjs
+      - name: Upload archifyX.zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: archifyX-zip
+          path: archifyX.zip

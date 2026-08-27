@@ -2,6 +2,7 @@
 /** Self-contained package smoke — no external Archify required. */
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
@@ -33,10 +34,15 @@ const rootRequired = [
   'docs/start.html',
   'docs/guide.html',
   'docs/gallery.html',
+  'docs/install.md',
   'docs/authoring-cookbook.md',
   'docs/COMPLETENESS.md',
   'scripts/build-docs.mjs',
-  'scripts/run-tests.mjs'
+  'scripts/run-tests.mjs',
+  'scripts/build-zip.mjs',
+  'scripts/install-skill.mjs',
+  'scripts/check-release-identity.mjs',
+  'scripts/write-deterministic-zip.mjs'
 ];
 
 let failed = false;
@@ -78,5 +84,56 @@ if (doctor.status !== 0) {
   process.stdout.write(doctor.stdout || '');
 }
 
+const identity = spawnSync(process.execPath, [path.join(root, 'scripts', 'check-release-identity.mjs')], {
+  encoding: 'utf8'
+});
+if (identity.status !== 0) {
+  process.stderr.write(identity.stderr || '');
+  process.stdout.write(identity.stdout || '');
+  failed = true;
+} else {
+  process.stdout.write(identity.stdout || '');
+}
+
+// Pack smoke: build zip from workdir, extract, doctor.
+const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'archifyx-smoke-'));
+const zipPath = path.join(tmp, 'archifyX.zip');
+const pack = spawnSync(
+  process.execPath,
+  [path.join(root, 'scripts', 'build-zip.mjs'), zipPath, '--workdir', '--any-node'],
+  { encoding: 'utf8' }
+);
+if (pack.status !== 0) {
+  console.error('build-zip failed');
+  process.stderr.write(pack.stderr || '');
+  process.stdout.write(pack.stdout || '');
+  failed = true;
+} else {
+  process.stdout.write(pack.stdout || '');
+  const extractDir = path.join(tmp, 'out');
+  fs.mkdirSync(extractDir);
+  const tar = spawnSync('tar', ['-xf', zipPath, '-C', extractDir], { encoding: 'utf8' });
+  const skillRoot = path.join(extractDir, 'archifyX');
+  if (tar.status !== 0 || !fs.existsSync(path.join(skillRoot, 'SKILL.md'))) {
+    console.error('zip extract / layout failed (expected archifyX/SKILL.md)');
+    process.stderr.write(tar.stderr || '');
+    failed = true;
+  } else {
+    const packedDoctor = spawnSync(process.execPath, [path.join(skillRoot, 'bin', 'archifyX.mjs'), 'doctor'], {
+      encoding: 'utf8',
+      env: { ...process.env, ARCHIFY_ROOT: '' }
+    });
+    if (packedDoctor.status !== 0) {
+      console.error('packed doctor failed');
+      process.stderr.write(packedDoctor.stderr || '');
+      process.stdout.write(packedDoctor.stdout || '');
+      failed = true;
+    } else {
+      console.log('packed zip doctor OK');
+    }
+  }
+}
+fs.rmSync(tmp, { recursive: true, force: true });
+
 if (failed) process.exit(1);
-console.log('package-smoke OK (self-contained)');
+console.log('package-smoke OK (self-contained + pack)');

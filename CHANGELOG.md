@@ -10,6 +10,7 @@
 - Zero external Archify runtime dependency (`NOTICE.md` for engine provenance)
 - Skill docs, PRODUCT / DESIGN / ROADMAP / CONTRIBUTING, bilingual README
 - `scripts/package-smoke.mjs`
+- Full install/distribution: deterministic `archifyX.zip`, `install-skill`, release-identity gate, `docs/install.md` + start install matrix (`npx skills add CommerQ/archifyX …`)
 
 ### Product traits
 

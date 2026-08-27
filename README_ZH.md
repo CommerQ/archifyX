@@ -31,6 +31,19 @@ node bin/archifyX.mjs demo ../examples/demo-out
 
 ## 安装 Skill
 
+完整矩阵见 [docs/install.md](docs/install.md) · [docs/start.html](docs/start.html)
+
+```bash
+# 推荐 — skills CLI
+npx -y skills add CommerQ/archifyX --skill archifyX --agent cursor --global --copy --yes
+
+# 或本仓库打包安装（正式 ZIP 用 Node 22）
+npm run pack:local
+npm run install:skill -- --agent cursor --from archifyX.zip --force
+```
+
+Windows 开发联接：
+
 ```bat
 mklink /J "%USERPROFILE%\.cursor\skills\archifyX" "D:\workspace\archifyX\archifyX"
 ```
